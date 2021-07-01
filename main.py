@@ -29,7 +29,7 @@ SCHEMA_URL = 'swagger.json'
 page_title = 'Falcon Swagger Doc'
 favicon_url = 'https://falconframework.org/favicon-32x32.png'
 
-app = falcon.API()
+app = falcon.API(cors_enable=True)
 
 main = MainResource()
 customer = CustomerResource()

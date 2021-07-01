@@ -44,7 +44,30 @@ class CustomerResource(BaseResource):
             })
 
     def on_post(self, req, resp):
-        doc = req.context['doc']
-        customer = Customer(fiscal_number=doc['fiscal_number'])
-        customer.save()
-        self.success(resp, "Customer created with success")
+        try:
+
+            resp.status = falcon.HTTP_201
+            customer_data = req.media
+
+            # req.media will deserialize json object
+            customer_obj = Customer.objects.create(**customer_data)
+            resp.body = json.dumps({
+                'message': 'customer succesfully created!',
+                'status': 201,
+                'data': str(customer_obj)
+            })
+            return
+
+        except Exception as e:
+
+            resp.status = falcon.HTTP_400
+            resp.body = json.dumps({
+                'message': str(e),
+                'status': 400,
+                'data': {}
+            })
+            return
+        # doc = req.context['doc']
+        # customer = Customer(fiscal_number=doc['fiscal_number'])
+        # customer.save()
+        # self.success(resp, "Customer created with success")
